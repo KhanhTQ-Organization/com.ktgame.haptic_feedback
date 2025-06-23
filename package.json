@@ -1,0 +1,15 @@
+{
+  "name": "com.ktgame.haptic_feedback",
+  "version": "1.0.0",
+  "displayName": "com.ktgame.haptic_feedback",
+  "description": "Haptic Feedback Manager",
+  "unity": "2019.4",
+  "author": {
+    "name": "ktgame",
+    "email": "khanhquang0912qh@gmail.com",
+    "url": ""
+  },
+  "dependencies": {
+    "com.unity.modules.androidjni": "1.0.0"
+  }
+}

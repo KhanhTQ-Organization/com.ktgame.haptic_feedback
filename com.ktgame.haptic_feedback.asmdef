@@ -1,0 +1,22 @@
+{
+    "name": "com.ktgame.haptic_feedback",
+    "rootNamespace": "",
+    "references": [
+        "GUID:554646506760c444e8c83e5eb5416a5e",
+        "GUID:cf71d521a1fdb4048be474c17bc79276",
+        "com.ktgame.haptic_feedback.iOS"
+    ],
+    "includePlatforms": [
+        "Android",
+        "Editor",
+        "iOS"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
