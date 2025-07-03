@@ -9,9 +9,6 @@
     "email": "khanhquang0912qh@gmail.com",
     "url": ""
   },
-  "dependencies": {
-    "com.unity.modules.androidjni": "1.0.0"
-  },
   "publishConfig": {
     "registry": "http://3.25.208.95:4873"
   }
