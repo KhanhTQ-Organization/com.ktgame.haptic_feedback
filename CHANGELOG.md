@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/KhanhTQ-Organization/com.ktgame.haptic_feedback/compare/v1.0.2...v1.0.3) (2026-05-06)
+
+
+### Bug Fixes
+
+* rl ip scope ([88fc2f8](https://github.com/KhanhTQ-Organization/com.ktgame.haptic_feedback/commit/88fc2f892bda1a6770a7b656fe31cdf93e236968))
+
 ## [1.0.2](https://github.com/KhanhTQ-Organization/com.ktgame.haptic_feedback/compare/v1.0.1...v1.0.2) (2025-07-03)
 
 
