@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/KhanhTQ-Organization/com.ktgame.haptic_feedback/compare/v1.0.3...v1.0.4) (2026-08-21)
+
+
+### Bug Fixes
+
+* update haptick ([63df10d](https://github.com/KhanhTQ-Organization/com.ktgame.haptic_feedback/commit/63df10d661e05c7b3db103e40f01ef72433b2d82))
+
 ## [1.0.3](https://github.com/KhanhTQ-Organization/com.ktgame.haptic_feedback/compare/v1.0.2...v1.0.3) (2026-05-06)
 
 
