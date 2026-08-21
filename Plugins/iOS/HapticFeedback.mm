@@ -8,9 +8,23 @@ extern "C"
 
     void PerformHapticFeedback(const char* style) {
 
-        UIImpactFeedbackStyle feedbackStyle;
-
         const NSString* styleString = [NSString stringWithUTF8String: style];
+
+        if ([styleString isEqualToString:@"success"]) {
+            UINotificationFeedbackGenerator *generator = [[UINotificationFeedbackGenerator alloc] init];
+            [generator notificationOccurred:UINotificationFeedbackTypeSuccess];
+            return;
+        } else if ([styleString isEqualToString:@"warning"]) {
+            UINotificationFeedbackGenerator *generator = [[UINotificationFeedbackGenerator alloc] init];
+            [generator notificationOccurred:UINotificationFeedbackTypeWarning];
+            return;
+        } else if ([styleString isEqualToString:@"error"]) {
+            UINotificationFeedbackGenerator *generator = [[UINotificationFeedbackGenerator alloc] init];
+            [generator notificationOccurred:UINotificationFeedbackTypeError];
+            return;
+        }
+
+        UIImpactFeedbackStyle feedbackStyle;
 
         if ([styleString isEqualToString:@"light"]) {
 

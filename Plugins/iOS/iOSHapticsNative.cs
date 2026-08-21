@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 namespace com.ktgame.haptic_feedback.iOS
 {
 
-    public static class HapticFeedback
+    public static class iOSHapticsNative
     {
 
         [DllImport("__Internal")]

@@ -23,6 +23,21 @@ namespace com.ktgame.haptic_feedback
             HapticFeedback.HeavyFeedback();
         }
 
+        public void SuccessFeedback()
+        {
+            HapticFeedback.SuccessFeedback();
+        }
+
+        public void WarningFeedback()
+        {
+            HapticFeedback.WarningFeedback();
+        }
+
+        public void ErrorFeedback()
+        {
+            HapticFeedback.ErrorFeedback();
+        }
+
     }
 
 }

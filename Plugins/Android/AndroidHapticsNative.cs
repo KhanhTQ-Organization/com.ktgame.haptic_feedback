@@ -5,7 +5,7 @@ using UnityEngine;
 namespace com.ktgame.haptic_feedback.Android
 {
 
-    public enum HapticFeedbackConstants
+    public enum AndroidHapticFeedbackConstants
     {
 
         LONG_PRESS = 0,
@@ -46,7 +46,7 @@ namespace com.ktgame.haptic_feedback.Android
 
     }
 
-    public static class HapticFeedback
+    public static class AndroidHapticsNative
     {
 
         private static AndroidJavaObject _androidPlugin;
@@ -71,7 +71,7 @@ namespace com.ktgame.haptic_feedback.Android
             }
         }
 
-        public static void PerformHapticFeedback(HapticFeedbackConstants hapticFeedbackConstants)
+        public static void PerformHapticFeedback(AndroidHapticFeedbackConstants hapticFeedbackConstants)
         {
             androidPlugin.Call("PerformHapticFeedback", (int)hapticFeedbackConstants);
         }

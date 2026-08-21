@@ -1,9 +1,8 @@
 {
     "name": "com.ktgame.haptic_feedback.iOS",
-    "rootNamespace": "com.ktgame.haptic_feedback.iOS",
+    "rootNamespace": "",
     "references": [],
     "includePlatforms": [
-        "Editor",
         "iOS"
     ],
     "excludePlatforms": [],
