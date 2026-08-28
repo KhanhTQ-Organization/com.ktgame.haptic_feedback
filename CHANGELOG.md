@@ -1,3 +1,10 @@
+## [1.0.7](https://github.com/KhanhTQ-Organization/com.ktgame.haptic_feedback/compare/v1.0.6...v1.0.7) (2026-08-28)
+
+
+### Bug Fixes
+
+* remove aar ([8421df8](https://github.com/KhanhTQ-Organization/com.ktgame.haptic_feedback/commit/8421df8abcca09b62d23fc9b4d69188b79066936))
+
 ## [1.0.6](https://github.com/KhanhTQ-Organization/com.ktgame.haptic_feedback/compare/v1.0.5...v1.0.6) (2026-08-28)
 
 
