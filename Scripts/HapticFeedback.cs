@@ -109,6 +109,23 @@ namespace com.ktgame.haptic_feedback
 
         }
 
+        public static void CustomFeedback(long milliseconds, int amplitude)
+        {
+            if (!IsEnabled) return;
+            
+            float durationSeconds = milliseconds / 1000f;
+            float intensity0to1 = Mathf.Clamp01(amplitude / 255f);
+
+#if UNITY_IOS && !UNITY_EDITOR
+            iOS.iOSHapticsNative.PlayCustomHaptic(durationSeconds, intensity0to1);
+#elif UNITY_ANDROID && !UNITY_EDITOR
+            int clampedAmplitude = (int)Mathf.Clamp(amplitude, 1, 255);
+            Android.AndroidHapticsNative.Vibrate(milliseconds, clampedAmplitude);
+#else
+            Debug.Log($"[Haptic] 🎛 Rung TÙY CHỈNH (Duration: {milliseconds}ms, Amplitude: {amplitude})");
+#endif
+        }
+
     }
 
 }
