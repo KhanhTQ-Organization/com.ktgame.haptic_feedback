@@ -76,6 +76,11 @@ namespace com.ktgame.haptic_feedback.Android
             androidPlugin.Call("PerformHapticFeedback", (int)hapticFeedbackConstants);
         }
 
+        public static void Vibrate(long milliseconds, int amplitude)
+        {
+            androidPlugin.Call("Vibrate", milliseconds, amplitude);
+        }
+
     }
 
 }

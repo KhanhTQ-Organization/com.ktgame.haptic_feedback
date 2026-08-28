@@ -38,6 +38,11 @@ namespace com.ktgame.haptic_feedback
             HapticFeedback.ErrorFeedback();
         }
 
+        public void CustomFeedback(float durationSeconds, float intensity0to1)
+        {
+            HapticFeedback.CustomFeedback(durationSeconds, intensity0to1);
+        }
+
     }
 
 }

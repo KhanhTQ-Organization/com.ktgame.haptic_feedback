@@ -2,6 +2,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <CoreHaptics/CoreHaptics.h>
 
 extern "C"
 {
@@ -53,6 +54,41 @@ extern "C"
 
         [feedbackGenerator impactOccurred];
 
+    }
+
+    static CHHapticEngine *hapticEngine = nil;
+
+    void PlayCustomHaptic(float duration, float intensity) {
+        if (@available(iOS 13.0, *)) {
+            if (hapticEngine == nil) {
+                NSError *error = nil;
+                hapticEngine = [[CHHapticEngine alloc] initAndReturnError:&error];
+                if (error) {
+                    hapticEngine = nil;
+                    return;
+                }
+                [hapticEngine startAndReturnError:nil];
+            }
+            
+            CHHapticEventParameter *intensityParam = [[CHHapticEventParameter alloc] initWithParameterID:CHHapticEventParameterIDHapticIntensity value:intensity];
+            CHHapticEventParameter *sharpnessParam = [[CHHapticEventParameter alloc] initWithParameterID:CHHapticEventParameterIDHapticSharpness value:1.0];
+            
+            CHHapticEvent *event = [[CHHapticEvent alloc] initWithEventType:CHHapticEventTypeHapticContinuous parameters:@[intensityParam, sharpnessParam] relativeTime:0 duration:duration];
+            
+            NSError *error = nil;
+            CHHapticPattern *pattern = [[CHHapticPattern alloc] initWithEvents:@[event] parameters:@[] error:&error];
+            if (!error) {
+                id<CHHapticPatternPlayer> player = [hapticEngine createPlayerWithPattern:pattern error:&error];
+                if (!error) {
+                    [player startAtTime:0 error:nil];
+                }
+            }
+        } else {
+            if (@available(iOS 10.0, *)) {
+                UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleHeavy];
+                [generator impactOccurred];
+            }
+        }
     }
 
 }

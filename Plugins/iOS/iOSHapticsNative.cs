@@ -11,6 +11,9 @@ namespace com.ktgame.haptic_feedback.iOS
         [DllImport("__Internal")]
         public static extern void PerformHapticFeedback(string style = "medium");
 
+        [DllImport("__Internal")]
+        public static extern void PlayCustomHaptic(float duration, float intensity);
+
     }
 
 }
