@@ -18,7 +18,7 @@ namespace com.ktgame.haptic_feedback
 #elif UNITY_ANDROID && !UNITY_EDITOR
             Android.AndroidHapticsNative.PerformHapticFeedback(Android.AndroidHapticFeedbackConstants.CONTEXT_CLICK);
 #else
-            Debug.Log("[Haptic] 📳 Rung NHẸ (Light Feedback)");
+            //Debug.Log("[Haptic] 📳 Rung NHẸ (Light Feedback)");
 #endif
 
         }
@@ -32,7 +32,7 @@ namespace com.ktgame.haptic_feedback
 #elif UNITY_ANDROID && !UNITY_EDITOR
             Android.AndroidHapticsNative.PerformHapticFeedback(Android.AndroidHapticFeedbackConstants.VIRTUAL_KEY);
 #else
-            Debug.Log("[Haptic] 📳 Rung VỪA (Medium Feedback)");
+            //Debug.Log("[Haptic] 📳 Rung VỪA (Medium Feedback)");
 #endif
 
         }
@@ -46,7 +46,7 @@ namespace com.ktgame.haptic_feedback
 #elif UNITY_ANDROID && !UNITY_EDITOR
             Android.AndroidHapticsNative.PerformHapticFeedback(Android.AndroidHapticFeedbackConstants.LONG_PRESS);
 #else
-            Debug.Log("[Haptic] 📳 Rung MẠNH (Heavy Feedback)");
+            //Debug.Log("[Haptic] 📳 Rung MẠNH (Heavy Feedback)");
 #endif
 
         }
@@ -60,7 +60,7 @@ namespace com.ktgame.haptic_feedback
 #elif UNITY_ANDROID && !UNITY_EDITOR
             Android.AndroidHapticsNative.PerformHapticFeedback(Android.AndroidHapticFeedbackConstants.CONFIRM);
 #else
-            Debug.Log("[Haptic] ✅ Rung THÀNH CÔNG (Success Feedback)");
+            //Debug.Log("[Haptic] ✅ Rung THÀNH CÔNG (Success Feedback)");
 #endif
 
         }
@@ -74,7 +74,7 @@ namespace com.ktgame.haptic_feedback
 #elif UNITY_ANDROID && !UNITY_EDITOR
             Android.AndroidHapticsNative.PerformHapticFeedback(Android.AndroidHapticFeedbackConstants.ENTRY_BUMP);
 #else
-            Debug.Log("[Haptic] ⚠️ Rung CẢNH BÁO (Warning Feedback)");
+            //Debug.Log("[Haptic] ⚠️ Rung CẢNH BÁO (Warning Feedback)");
 #endif
 
         }
@@ -88,7 +88,7 @@ namespace com.ktgame.haptic_feedback
 #elif UNITY_ANDROID && !UNITY_EDITOR
             Android.AndroidHapticsNative.PerformHapticFeedback(Android.AndroidHapticFeedbackConstants.REJECT);
 #else
-            Debug.Log("[Haptic] ❌ Rung LỖI (Error Feedback)");
+           //Debug.Log("[Haptic] ❌ Rung LỖI (Error Feedback)");
 #endif
 
         }
@@ -104,7 +104,7 @@ namespace com.ktgame.haptic_feedback
             int amplitude = (int)Mathf.Clamp(intensity0to1 * 255f, 1f, 255f);
             Android.AndroidHapticsNative.Vibrate(milliseconds, amplitude);
 #else
-            Debug.Log($"[Haptic] 🎛 Rung TÙY CHỈNH (Duration: {durationSeconds}s, Intensity: {intensity0to1})");
+            //Debug.Log($"[Haptic] 🎛 Rung TÙY CHỈNH (Duration: {durationSeconds}s, Intensity: {intensity0to1})");
 #endif
 
         }
@@ -122,7 +122,7 @@ namespace com.ktgame.haptic_feedback
             int clampedAmplitude = (int)Mathf.Clamp(amplitude, 1, 255);
             Android.AndroidHapticsNative.Vibrate(milliseconds, clampedAmplitude);
 #else
-            Debug.Log($"[Haptic] 🎛 Rung TÙY CHỈNH (Duration: {milliseconds}ms, Amplitude: {amplitude})");
+            //Debug.Log($"[Haptic] 🎛 Rung TÙY CHỈNH (Duration: {milliseconds}ms, Amplitude: {amplitude})");
 #endif
         }
 
