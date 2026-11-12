@@ -1,6 +1,6 @@
 {
   "name": "com.ktgame.haptic_feedback",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "displayName": "com.ktgame.haptic_feedback",
   "description": "Haptic Feedback for Android (Vibrator/VibrationEffect) and iOS (UIFeedbackGenerator/Core Haptics). No-op on other platforms.",
   "unity": "2021.3",
