@@ -1,131 +1,175 @@
-// Copyright (c) Scott Doxey. All Rights Reserved. Licensed under the MIT License. See LICENSE in the project root for license information.
+﻿// Based on HapticFeedback by Scott Doxey (CandyCoded), MIT License. See THIRD-PARTY-NOTICES.md.
+// Modified by ktgame.
 
+using System;
 using UnityEngine;
 
 namespace com.ktgame.haptic_feedback
 {
+	public static class HapticFeedback
+	{
+		public static bool IsEnabled = true;
+		
+		public static bool LogInEditor = false;
 
-    public static class HapticFeedback
-    {
-        public static bool IsEnabled = true;
+		private enum HapticType
+		{
+			Light = 0,
+			Medium = 1,
+			Heavy = 2,
+			Success = 3,
+			Warning = 4,
+			Error = 5
+		}
 
-        public static void LightFeedback()
-        {
-            if (!IsEnabled) return;
+		private static bool? _isSupported;
+		
+		public static bool IsSupported
+		{
+			get
+			{
+				if (_isSupported.HasValue)
+				{
+					return _isSupported.Value;
+				}
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+				_isSupported = Android.AndroidHapticsNative.HasVibrator();
+#elif UNITY_IOS && !UNITY_EDITOR
+				_isSupported = SystemInfo.supportsVibration;
+#else
+				_isSupported = false;
+#endif
+				return _isSupported.Value;
+			}
+		}
+
+		public static void LightFeedback()
+		{
+			Play(HapticType.Light);
+		}
+
+		public static void MediumFeedback()
+		{
+			Play(HapticType.Medium);
+		}
+
+		public static void HeavyFeedback()
+		{
+			Play(HapticType.Heavy);
+		}
+
+		public static void SuccessFeedback()
+		{
+			Play(HapticType.Success);
+		}
+
+		public static void WarningFeedback()
+		{
+			Play(HapticType.Warning);
+		}
+
+		public static void ErrorFeedback()
+		{
+			Play(HapticType.Error);
+		}
+		
+		public static void CustomFeedback(float durationSeconds, float intensity0to1)
+		{
+			if (!IsEnabled || float.IsNaN(durationSeconds) || durationSeconds <= 0f)
+			{
+				return;
+			}
+
+			var intensity = Mathf.Clamp01(intensity0to1);
 
 #if UNITY_IOS && !UNITY_EDITOR
-            iOS.iOSHapticsNative.PerformHapticFeedback("light");
+			SafeNative(() => iOS.iOSHapticsNative.PlayCustomHaptic(durationSeconds, intensity));
 #elif UNITY_ANDROID && !UNITY_EDITOR
-            Android.AndroidHapticsNative.PerformHapticFeedback(Android.AndroidHapticFeedbackConstants.CONTEXT_CLICK);
+			var milliseconds = (long)(durationSeconds * 1000f);
+			var amplitude = (int)Mathf.Clamp(intensity * 255f, 1f, 255f);
+			Android.AndroidHapticsNative.Vibrate(milliseconds, amplitude);
 #else
-            //Debug.Log("[Haptic] 📳 Rung NHẸ (Light Feedback)");
+			LogEditor($"Custom ({durationSeconds}s, intensity {intensity})");
 #endif
+		}
+		
+		public static void CustomFeedback(long milliseconds, int amplitude)
+		{
+			if (!IsEnabled || milliseconds <= 0)
+			{
+				return;
+			}
 
-        }
-
-        public static void MediumFeedback()
-        {
-            if (!IsEnabled) return;
+			var clampedAmplitude = Mathf.Clamp(amplitude, 1, 255);
 
 #if UNITY_IOS && !UNITY_EDITOR
-            iOS.iOSHapticsNative.PerformHapticFeedback("medium");
+			SafeNative(() => iOS.iOSHapticsNative.PlayCustomHaptic(milliseconds / 1000f, clampedAmplitude / 255f));
 #elif UNITY_ANDROID && !UNITY_EDITOR
-            Android.AndroidHapticsNative.PerformHapticFeedback(Android.AndroidHapticFeedbackConstants.VIRTUAL_KEY);
+			Android.AndroidHapticsNative.Vibrate(milliseconds, clampedAmplitude);
 #else
-            //Debug.Log("[Haptic] 📳 Rung VỪA (Medium Feedback)");
+			LogEditor($"Custom ({milliseconds}ms, amplitude {clampedAmplitude})");
 #endif
+		}
 
-        }
-
-        public static void HeavyFeedback()
-        {
-            if (!IsEnabled) return;
+		private static void Play(HapticType type)
+		{
+			if (!IsEnabled)
+			{
+				return;
+			}
 
 #if UNITY_IOS && !UNITY_EDITOR
-            iOS.iOSHapticsNative.PerformHapticFeedback("heavy");
+			SafeNative(() => iOS.iOSHapticsNative.PerformHapticFeedback(ToIOSStyle(type)));
 #elif UNITY_ANDROID && !UNITY_EDITOR
-            Android.AndroidHapticsNative.PerformHapticFeedback(Android.AndroidHapticFeedbackConstants.LONG_PRESS);
+			Android.AndroidHapticsNative.PlayEffect((Android.AndroidHapticEffect)(int)type);
 #else
-            //Debug.Log("[Haptic] 📳 Rung MẠNH (Heavy Feedback)");
+			LogEditor(type.ToString());
 #endif
-
-        }
-
-        public static void SuccessFeedback()
-        {
-            if (!IsEnabled) return;
+		}
 
 #if UNITY_IOS && !UNITY_EDITOR
-            iOS.iOSHapticsNative.PerformHapticFeedback("success");
-#elif UNITY_ANDROID && !UNITY_EDITOR
-            Android.AndroidHapticsNative.PerformHapticFeedback(Android.AndroidHapticFeedbackConstants.CONFIRM);
-#else
-            //Debug.Log("[Haptic] ✅ Rung THÀNH CÔNG (Success Feedback)");
+		private static string ToIOSStyle(HapticType type)
+		{
+			switch (type)
+			{
+				case HapticType.Light: return "light";
+				case HapticType.Heavy: return "heavy";
+				case HapticType.Success: return "success";
+				case HapticType.Warning: return "warning";
+				case HapticType.Error: return "error";
+				default: return "medium";
+			}
+		}
+
+		private static bool _nativeFailed;
+
+		private static void SafeNative(Action action)
+		{
+			if (_nativeFailed)
+			{
+				return;
+			}
+
+			try
+			{
+				action();
+			}
+			catch (Exception e)
+			{
+				_nativeFailed = true;
+				Debug.LogWarning($"[HapticFeedback] iOS native call failed, haptics disabled: {e.Message}");
+			}
+		}
 #endif
 
-        }
-
-        public static void WarningFeedback()
-        {
-            if (!IsEnabled) return;
-
-#if UNITY_IOS && !UNITY_EDITOR
-            iOS.iOSHapticsNative.PerformHapticFeedback("warning");
-#elif UNITY_ANDROID && !UNITY_EDITOR
-            Android.AndroidHapticsNative.PerformHapticFeedback(Android.AndroidHapticFeedbackConstants.ENTRY_BUMP);
-#else
-            //Debug.Log("[Haptic] ⚠️ Rung CẢNH BÁO (Warning Feedback)");
-#endif
-
-        }
-
-        public static void ErrorFeedback()
-        {
-            if (!IsEnabled) return;
-
-#if UNITY_IOS && !UNITY_EDITOR
-            iOS.iOSHapticsNative.PerformHapticFeedback("error");
-#elif UNITY_ANDROID && !UNITY_EDITOR
-            Android.AndroidHapticsNative.PerformHapticFeedback(Android.AndroidHapticFeedbackConstants.REJECT);
-#else
-           //Debug.Log("[Haptic] ❌ Rung LỖI (Error Feedback)");
-#endif
-
-        }
-
-        public static void CustomFeedback(float durationSeconds, float intensity0to1)
-        {
-            if (!IsEnabled) return;
-
-#if UNITY_IOS && !UNITY_EDITOR
-            iOS.iOSHapticsNative.PlayCustomHaptic(durationSeconds, intensity0to1);
-#elif UNITY_ANDROID && !UNITY_EDITOR
-            long milliseconds = (long)(durationSeconds * 1000f);
-            int amplitude = (int)Mathf.Clamp(intensity0to1 * 255f, 1f, 255f);
-            Android.AndroidHapticsNative.Vibrate(milliseconds, amplitude);
-#else
-            //Debug.Log($"[Haptic] 🎛 Rung TÙY CHỈNH (Duration: {durationSeconds}s, Intensity: {intensity0to1})");
-#endif
-
-        }
-
-        public static void CustomFeedback(long milliseconds, int amplitude)
-        {
-            if (!IsEnabled) return;
-            
-            float durationSeconds = milliseconds / 1000f;
-            float intensity0to1 = Mathf.Clamp01(amplitude / 255f);
-
-#if UNITY_IOS && !UNITY_EDITOR
-            iOS.iOSHapticsNative.PlayCustomHaptic(durationSeconds, intensity0to1);
-#elif UNITY_ANDROID && !UNITY_EDITOR
-            int clampedAmplitude = (int)Mathf.Clamp(amplitude, 1, 255);
-            Android.AndroidHapticsNative.Vibrate(milliseconds, clampedAmplitude);
-#else
-            //Debug.Log($"[Haptic] 🎛 Rung TÙY CHỈNH (Duration: {milliseconds}ms, Amplitude: {amplitude})");
-#endif
-        }
-
-    }
-
+		[System.Diagnostics.Conditional("UNITY_EDITOR")]
+		private static void LogEditor(string message)
+		{
+			if (LogInEditor)
+			{
+				Debug.Log($"[HapticFeedback] {message}");
+			}
+		}
+	}
 }
